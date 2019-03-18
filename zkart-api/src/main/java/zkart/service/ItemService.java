@@ -2,6 +2,7 @@ package zkart.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -14,15 +15,22 @@ public class ItemService {
 	@Autowired
 	private ItemRepository itemRepository;
 	
-	public boolean addItem(String formData) {
+	@Autowired
+	private StorageService storageService;
+	
+	public boolean addItem(MultipartFile file,String formData) {
 		Item item=null;
+		boolean res=true;
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			item = mapper.readValue(formData, Item.class);
-			System.out.println(item);
+			item=itemRepository.save(item);
+			storageService.uploadFile(file, item.getItemId().toString());
+			return true;
 		}catch(Exception e) {
+			res=false;
 			System.out.println(e);
 		}
-		return itemRepository.save(item)!=null;
+		return res;
 	}
 }

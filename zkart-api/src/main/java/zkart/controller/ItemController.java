@@ -26,8 +26,8 @@ public class ItemController {
 	@RequestMapping(method = RequestMethod.POST, value = "/addItem")
 	public void addItem(@RequestParam(value = "formData", required = false) String formData,@RequestParam("file") MultipartFile file) {
 		String fname=file.getOriginalFilename();
-		itemService.addItem(formData);
-		storageService.uploadFile(file,formData);
+		itemService.addItem(file,formData);
+		//storageService.uploadFile(file,formData);
 		return;
 	}
 	
