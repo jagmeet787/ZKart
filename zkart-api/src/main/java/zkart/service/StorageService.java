@@ -20,9 +20,6 @@ import java.nio.file.StandardCopyOption;
 @Service
 public class StorageService {
 
-    @Value("${upload.path}")
-    private String path;
-
     public void uploadFile(MultipartFile file,String fileName) {
 
         if (file.isEmpty()) {
@@ -31,9 +28,19 @@ public class StorageService {
 
         try {
             InputStream is = file.getInputStream();
+            String path = "";
+            
+            if (System.getProperty("os.name").toLowerCase().contains("windows")) 
+            	path = "C:\\itemImages\\";
+            else path = "/home/itemImages/";
+            
             Path dest=Paths.get(path+fileName);
+            
+            System.out.println("Saving " + fileName + " in " + path + " .");
+            
             Files.copy(is, dest,
                     StandardCopyOption.REPLACE_EXISTING);
+        
         } catch (IOException e) {
 
             String msg = String.format("Failed to store file", file.getName());
