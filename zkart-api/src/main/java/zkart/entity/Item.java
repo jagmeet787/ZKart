@@ -22,7 +22,7 @@ public class Item{
 	@Column(unique=true)
 	private String itemId;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
         @JoinColumn(name="SUBCATEGORYID", referencedColumnName="ID")
     })
@@ -61,6 +61,14 @@ public class Item{
 
 	public Integer getId() {
 		return id;
+	}
+
+	public SubCategory getSubCategory() {
+		return subCategory;
+	}
+
+	public void setSubCategory(SubCategory subCategory) {
+		this.subCategory = subCategory;
 	}
 
 	public void setId(Integer id) {
