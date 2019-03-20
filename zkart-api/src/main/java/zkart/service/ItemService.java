@@ -44,7 +44,6 @@ public class ItemService {
 		while(iterator.hasNext()) {
 			items.add(iterator.next());
 		}
-		System.out.println(itemRepository.findById(1).get());
 		return items;	
 	}
 	public Item getZkartItemById(Integer id) {
