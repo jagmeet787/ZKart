@@ -31,19 +31,20 @@ public class AccountController {
 	public Account getAccountByAccountNumber(@PathVariable Integer accountNumber) {
 		return accountService.getAccountByAccountNumber(accountNumber);
 	}
-	
+	// not working
 	@RequestMapping("/user/{userId}")
 	public Account getAccountByUserId(@PathVariable("userId") Integer userId) {
 		System.out.println("userId: " + userId + ", " + accountService.getAccountByUserId(userId));
 		return accountService.getAccountByUserId(userId);
 	}
-	
+	//same error data is fetched fine in all these
 	@RequestMapping("/user/all/{userId}")
 	public List<Account> getAllAccountByUser(@PathVariable int userId) {
 		System.out.println("userId: " + userId + ", " + accountService.getAllAccountByUserId(userId));
 		return accountService.getAllAccountByUserId(userId);
 	}
 
+	//
 	@RequestMapping(method = RequestMethod.POST, value = "/accountno")
 	public Account getAccountByAccountNumber(@RequestBody Account account) {
 		Account accountDetails = accountService.getAccountByAccountNumber(account.getAccountNumber());
