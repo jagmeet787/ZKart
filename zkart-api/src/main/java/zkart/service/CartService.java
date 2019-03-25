@@ -32,7 +32,7 @@ public class CartService {
 
 	public Cart getCartItemByItemId(String itemId, Integer userId) {
 		ArrayList<Cart> list = new ArrayList<Cart>();
-		cartRepository.findAllByUserId(userId).stream().filter(i -> i.getItemId() == itemId).forEach(list::add);;
+		cartRepository.findAllByUserId(userId).stream().filter(i -> i.getItemId() == itemId).forEach(list::add);
 		return list == null ? null : list.get(0);
 	}
 

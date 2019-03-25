@@ -87,16 +87,11 @@ public class ItemController {
 	public ResponseEntity<ArrayList<Item>> getZkartItemsByCategoryId(@PathVariable("id") Integer id){
 		return new ResponseEntity<>(itemService.getAllItemsByCategoryId(id),HttpStatus.OK);
 	}
-	/*@GET
-	@Path("/category/{id}")
-	@Produces("application/json")
-	public List<FlopkartListing> getListingByCategoryId(@PathParam("id") int id) {
-		FlopkartListingDAO dao = new FlopkartListingDAO();
-		List<FlopkartListing> listing_details = dao.getFlopkartListingBycategoryId(id);
-		if (listing_details == null)
-			return null;
-		else
-			return listing_details;
-	}*/
 	
+	@RequestMapping(method=RequestMethod.GET,value="/seller/{id}")
+	public ResponseEntity<ArrayList<Item>> getZkartItemsBySellerId(@PathVariable("id") Integer id){
+		return new ResponseEntity<>(itemService.getZkartItemsBySellerId(id),HttpStatus.OK);
+	}
+	
+
 }

@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import zkart.entity.Account;
 import zkart.entity.Item;
 import zkart.entity.SubCategory;
 import zkart.repository.ItemRepository;
@@ -24,6 +25,9 @@ public class ItemService {
 	
 	@Autowired
 	private StorageService storageService;
+	
+	@Autowired
+	private UserService userService;
 	
 	public boolean addItem(MultipartFile file,String formData) {
 		Item item=null;
@@ -94,4 +98,8 @@ public class ItemService {
 		}
 		return res;
 	}
+	public ArrayList<Item> getZkartItemsBySellerId(Integer sellerId){
+		return itemRepository.findAllByUserId(sellerId);
+	}
+
 }
