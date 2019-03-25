@@ -41,5 +41,9 @@ public class ReviewService {
 		reviewRepository.findAllByUserId(id).forEach(list::add);
 		return list;
 	}
+
+	public void delete(Integer id) {
+		reviewRepository.deleteById(id);
+	}
 	
 }
