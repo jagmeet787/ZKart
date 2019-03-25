@@ -10,7 +10,7 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Order {
+public class Orders {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
@@ -22,7 +22,7 @@ public class Order {
 	private User user; //
 	private String itemId;
 	private Integer orderId;
-	private String status;
+	private String orderStatus;
 	private String orderDate;
 	private String recievedDate;
 	private String returnDate;
@@ -30,10 +30,10 @@ public class Order {
 	private Integer quantity;
 	private Integer buyerAccountNo;
 	
-	public Order() {
+	public Orders() {
 	}
 
-	public Order(Integer id, String shippingAddress, User user, String itemId, Integer orderId, String status,
+	public Orders(Integer id, String shippingAddress, User user, String itemId, Integer orderId, String status,
 			String orderDate, String recievedDate, String returnDate, Integer totalAmount, Integer quantity,
 			Integer buyerAccountNo) {
 		this.id = id;
@@ -41,7 +41,7 @@ public class Order {
 		this.user = user;
 		this.itemId = itemId;
 		this.orderId = orderId;
-		this.status = status;
+		this.orderStatus = status;
 		this.orderDate = orderDate;
 		this.recievedDate = recievedDate;
 		this.returnDate = returnDate;
@@ -90,12 +90,12 @@ public class Order {
 		this.orderId = orderId;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getOrderStatus() {
+		return orderStatus;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
 	}
 
 	public String getOrderDate() {
@@ -149,7 +149,7 @@ public class Order {
 	@Override
 	public String toString() {
 		return "Order [id=" + id + ", shippingAddress=" + shippingAddress + ", user=" + user + ", itemId=" + itemId
-				+ ", orderId=" + orderId + ", status=" + status + ", orderDate=" + orderDate + ", recievedDate="
+				+ ", orderId=" + orderId + ", status=" + orderStatus + ", orderDate=" + orderDate + ", recievedDate="
 				+ recievedDate + ", returnDate=" + returnDate + ", totalAmount=" + totalAmount + ", quantity="
 				+ quantity + ", buyerAccountNo=" + buyerAccountNo + "]";
 	}

@@ -16,21 +16,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import zkart.entity.Account;
-import zkart.entity.Order;
+import zkart.entity.Orders;
 import zkart.service.AccountService;
-import zkart.service.OrderService;
+import zkart.service.OrdersService;
 import zkart.service.UserService;
 
 
 @RestController
 @RequestMapping("/orders")
-public class OrderController {
+public class OrdersController {
 
 	static final Integer ZKART_USERID = 1;
 	static final Integer RETURN_DAYS = 15;
 	
 	@Autowired
-	OrderService orderService;
+	OrdersService ordersService;
 	
 	@Autowired
 	AccountService accountService;
@@ -39,36 +39,36 @@ public class OrderController {
 	UserService userService;
 
 	@GetMapping("")
-	public List<Order> getAllOrders() {
-		return orderService.getAllOrders();
+	public List<Orders> getAllOrders() {
+		return ordersService.getAllOrders();
 	}
 
 	@GetMapping("/user/{id}")
-	public List<Order> getAllOrdersByUserId(@PathVariable("id") Integer userId) {
-		return orderService.getAllOrdersByUserId(userId);
+	public List<Orders> getAllOrdersByUserId(@PathVariable("id") Integer userId) {
+		return ordersService.getAllOrdersByUserId(userId);
 	}
 
 	@GetMapping("/order/{id}")
-	public List<Order> getAllOrdersByOrderId(@PathVariable("id") Integer orderId) {
-		return orderService.getAllOrdersByOrderId(orderId);
+	public List<Orders> getAllOrdersByOrderId(@PathVariable("id") Integer orderId) {
+		return ordersService.getAllOrdersByOrdersId(orderId);
 	}
 
 	@GetMapping("/item/{id}")
-	public List<Order> getOrdersByItemId(@PathVariable("id") String itemId) {
-		return orderService.getAllOrdersByItemId(itemId);
+	public List<Orders> getOrdersByItemId(@PathVariable("id") String itemId) {
+		return ordersService.getAllOrdersByItemId(itemId);
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<String> createOrder(Order order) {
+	public ResponseEntity<String> createOrder(Orders order) {
 
-		if (!orderService.createOrder(order)) 
+		if (!ordersService.createOrder(order)) 
 			return new ResponseEntity<>("Failed to Create Order.", HttpStatus.BAD_REQUEST);
 		//		return new ResponseEntity<>("Success.", HttpStatus.OK);
 		//		return new ResponseEntity<>("Nothing Updated!", HttpStatus.BAD_REQUEST);
 
 		// PAYMENT_RECIEVED and ORDER_FAILED
-		if (order.getStatus().equals("PAYMENT_RECIEVED")) {
-			orderService.updateOrder(order);
+		if (order.getOrderStatus().equals("PAYMENT_RECIEVED")) {
+			ordersService.updateOrder(order);
 			Account userAccount = accountService.getAccountByAccountNumber(order.getBuyerAccountNo());
 			Account zkartAccount = accountService.getAccountByUserId(ZKART_USERID);
 
@@ -87,27 +87,27 @@ public class OrderController {
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<String> updateOrder(@PathVariable("id") Integer id, Order order) {
+	public ResponseEntity<String> updateOrder(@PathVariable("id") Integer id, Orders order) {
 		order.setId(id);
-		if(orderService.updateOrder(order))
+		if(ordersService.updateOrder(order))
 			return new ResponseEntity<>("Success.", HttpStatus.OK);
 		return new ResponseEntity<>("Nothing Updated!", HttpStatus.BAD_REQUEST);
 	}
 
 	@RequestMapping(value = "/update/orderid/{orderId}", method = RequestMethod.PUT)
-	public ResponseEntity<String> updateOrderbyOrderId(@PathVariable("orderId") Integer orderId, Order order) {
-		List<Order> orderDetails = orderService.getAllOrdersByOrderId(orderId);
+	public ResponseEntity<String> updateOrderbyOrderId(@PathVariable("orderId") Integer orderId, Orders order) {
+		List<Orders> orderDetails = ordersService.getAllOrdersByOrdersId(orderId);
 		if (orderDetails != null) {
-			Order o = orderDetails.get(0);
+			Orders o = orderDetails.get(0);
 			order.setId(o.getId());
-			if (orderService.updateOrder(order))
+			if (ordersService.updateOrder(order))
 				return new ResponseEntity<>("Success.", HttpStatus.OK);
 		}
 		return new ResponseEntity<>("Nothing Updated!", HttpStatus.BAD_REQUEST);
 	}
 
 	@PutMapping("/update/orderid")
-	public ResponseEntity<String> updateOrderByOrderId(Order order) {
+	public ResponseEntity<String> updateOrderByOrderId(Orders order) {
 		/**
 		 * add recieved date to the database column if (item_shipped) seller has shipped
 		 * the item just update the order database
@@ -132,20 +132,20 @@ public class OrderController {
 		 * 7 ORDER_TERMINATED x
 		 * 8 ORDER_COMPLETED_AND_RETURNED x
 		 **/
-		List<Order> o = orderService.getAllOrdersByOrderId(order.getOrderId());
+		List<Orders> o = ordersService.getAllOrdersByOrdersId(order.getOrderId());
 		if (o == null) 
 			return new ResponseEntity<>("Invalid OrderId!", HttpStatus.BAD_REQUEST);
-		Order orderDetails = o.get(0);
-		String orderStatus = order.getStatus();
+		Orders orderDetails = o.get(0);
+		String orderStatus = order.getOrderStatus();
 		
 		System.out.println(orderStatus + "status print " + orderStatus.equals("PAYMENT_RECIEVED"));
 		
 		if (orderStatus.equals("ORDER_SHIPPED") || orderStatus.equals("ORDER_RETURNED")) {
-			orderService.updateOrder(order);
+			ordersService.updateOrder(order);
 		} else if (orderStatus.equals("ORDER_TERMINATED") || orderStatus.equals("ORDER_CANCELLED") || orderStatus.equals("ORDER_COMPLETED_AND_RETURNED")) {
 			
-			order.setStatus("ORDER_TERMINATED");
-			orderService.updateOrder(order);
+			order.setOrderStatus("ORDER_TERMINATED");
+			ordersService.updateOrder(order);
 			
 			Account userAccount = accountService.getAccountByAccountNumber(order.getBuyerAccountNo());
 			Account zkartAccount = accountService.getAccountByUserId(ZKART_USERID);
@@ -163,8 +163,8 @@ public class OrderController {
 
 		} else if (orderStatus.equals("ORDER_COMPLETED") || orderStatus.equals("ORDER_RECIEVED")) {
 			
-			order.setStatus("ORDER_COMPLETED");
-			orderService.updateOrder(order);
+			order.setOrderStatus("ORDER_COMPLETED");
+			ordersService.updateOrder(order);
 
 			// do a transation from zkart account to the seller account
 			String itemId = order.getItemId();
@@ -197,7 +197,7 @@ public class OrderController {
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> delete_Order(@PathVariable("id") Integer id) {
-		orderService.delete(id);
+		ordersService.delete(id);
 		return new ResponseEntity<>("Deleted.", HttpStatus.OK);
 	}
 }

@@ -33,6 +33,9 @@ public class AccountService {
 	public boolean updateAccount(Account account) {
 		return accountRepository.save(account) != null;
 	}
+	public Account getAccountById(Integer id) {
+		return accountRepository.findById(id).get();
+	}
 
 }
 
