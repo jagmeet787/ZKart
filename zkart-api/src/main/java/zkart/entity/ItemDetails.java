@@ -10,13 +10,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 
+@Entity
 public class ItemDetails {
 	
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer ID;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
         @JoinColumn(name="ITEMID", referencedColumnName="ID")
     })
@@ -39,6 +40,14 @@ public class ItemDetails {
 
 	public void setAttr_name(String attr_name) {
 		this.attr_name = attr_name;
+	}
+
+	public Item getItem() {
+		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
 	}
 
 	public String getAttr_val() {

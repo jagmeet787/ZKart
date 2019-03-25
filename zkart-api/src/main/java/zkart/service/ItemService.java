@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import zkart.entity.Item;
+import zkart.entity.SubCategory;
 import zkart.repository.ItemRepository;
 
 @Service
@@ -17,6 +18,9 @@ public class ItemService {
 	
 	@Autowired
 	private ItemRepository itemRepository;
+	
+	@Autowired
+	private SubCategoryService subCategoryService;
 	
 	@Autowired
 	private StorageService storageService;
@@ -28,8 +32,8 @@ public class ItemService {
 			ObjectMapper mapper = new ObjectMapper();
 			item = mapper.readValue(formData, Item.class);
 			item=itemRepository.save(item);
+			System.out.println("item saved");
 			storageService.uploadFile(file,item.getItemId().toString());
-			return true;
 		}catch(Exception e) {
 			res=false;
 			System.out.println("error"+e);
@@ -52,5 +56,42 @@ public class ItemService {
 	
 	public Item getZkartItemByItemId(String itemId) {
 		return itemRepository.findAllByItemId(itemId);
+	}
+	
+	public Boolean updateZkartItem(Integer id,Item item) {
+		boolean res=true;
+		item.setId(id);
+		try {
+			itemRepository.save(item);
+		}catch(Exception e) {
+			res=false;
+		}
+		return res;
+	}
+	public Boolean deleteZkartItem(Integer id) {
+		boolean res=true;
+		try {
+			itemRepository.deleteById(id);
+		}catch(Exception e) {
+			res=false;
+			System.out.println(e);
+		}
+		return res;
+	}
+	public ArrayList<Item> getAllItemsBySubcategoryId(Integer subcategoryId){
+		return itemRepository.findAllBySubCategoryId(subcategoryId);
+	}
+	
+	public ArrayList<Item> getAllItemsByCategoryId(Integer categoryId){
+		ArrayList<Item> res=new ArrayList<Item>();
+		try {
+			ArrayList<SubCategory> subCategories=subCategoryService.getZkartSubCategoryByCategoryId(categoryId);
+			for(SubCategory subCategory:subCategories) {
+				res.addAll(getAllItemsBySubcategoryId(subCategory.getId()));
+			}
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+		return res;
 	}
 }

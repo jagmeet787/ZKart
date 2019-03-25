@@ -22,13 +22,21 @@ public class Item{
 	@Column(unique=true)
 	private String itemId;
 	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
         @JoinColumn(name="SUBCATEGORYID", referencedColumnName="ID")
     })
-	private SubCategory subCategory;;
+	private SubCategory subCategory;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
         @JoinColumn(name="SELLERID", referencedColumnName="ID")
     })
