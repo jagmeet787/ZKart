@@ -7,6 +7,7 @@ import javax.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,12 +38,15 @@ public class WishlistController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET,value="/item/{id}")
-	public ResponseEntity<ArrayList<Wishlist>> getZkartWishlistByItemId(@PathParam("id") Integer id){
-		return new ResponseEntity<>(wishlistService.getZkartWishlistByItemId(id),HttpStatus.OK);
+	public ResponseEntity<ArrayList<Wishlist>> getZkartWishlistByItemId(@PathVariable("id") Integer id){
+		ArrayList<Wishlist> list = wishlistService.getZkartWishlistByItemId(id);
+		System.out.println(list);
+		System.out.println(id);
+		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET,value="/user/{id}")
-	public ResponseEntity<ArrayList<Wishlist>> getZkartWishlistbyUserId(@PathParam("id") Integer id){
+	public ResponseEntity<ArrayList<Wishlist>> getZkartWishlistbyUserId(@PathVariable ("id") Integer id){
 		return new ResponseEntity<>(wishlistService.getZkartWishlistByUserId(id),HttpStatus.OK);
 	}
     @RequestMapping(method=RequestMethod.DELETE,value="/delete/{id}")
@@ -55,7 +59,7 @@ public class WishlistController {
     }
     
     @RequestMapping(method=RequestMethod.GET,value="/isInWishlist/{userId}/{itemId}")
-    public ResponseEntity<Wishlist> getZkartWishListByUserIdItemId(@PathParam("userId") Integer userId,@PathParam("itemId") Integer itemId){
+    public ResponseEntity<Wishlist> getZkartWishListByUserIdItemId(@PathVariable("userId") Integer userId,@PathVariable("itemId") Integer itemId){
     	return new ResponseEntity<>(wishlistService.getWishlistByUserIdItemId(userId, itemId),HttpStatus.OK);
     }
   

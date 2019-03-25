@@ -71,7 +71,7 @@ public class ItemController {
 	@RequestMapping(method=RequestMethod.DELETE,value="/delete/{id}")
 	public ResponseEntity<String> deleteZkartItem(@PathVariable("id") Integer id){
 		boolean res=itemService.deleteZkartItem(id);
-		if(res==false) {
+		if(res==true) {
 			return new ResponseEntity<>("updated",HttpStatus.OK);
 		}else {
 			return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
