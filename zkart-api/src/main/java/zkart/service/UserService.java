@@ -38,10 +38,7 @@ public class UserService {
 	}
 	
 	public boolean updateUser(User user) {
-		return false;
-//		return userRepository.updateUserForEmail(user.getFirstName(), 
-//				user.getLastName(), user.getImageUrl(), user.getPassword(), 
-//				user.getAddress(), user.getWallet(), user.getSecret(), user.getEmail()) != 0;
+		return userRepository.save(user) != null;
 	}
 
 	public void deleteUser(Integer id) {

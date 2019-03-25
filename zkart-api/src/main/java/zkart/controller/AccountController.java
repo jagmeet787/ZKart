@@ -32,7 +32,7 @@ public class AccountController {
 		return accountService.getAccountByAccountNumber(accountNumber);
 	}
 	// not working
-	@RequestMapping("/user/{userId}")
+	@RequestMapping(value = "/user/{userId}", produces = "application/JSON")
 	public Account getAccountByUserId(@PathVariable("userId") Integer userId) {
 		System.out.println("userId: " + userId + ", " + accountService.getAccountByUserId(userId));
 		return accountService.getAccountByUserId(userId);
@@ -65,6 +65,7 @@ public class AccountController {
 		User user = new User(userId);
 		account.setUser(user);
 		account.setId(id);
+		// authenticate first?
 		if (accountService.updateAccount(account)) 
 			return new ResponseEntity<>("Success.", HttpStatus.OK);
 		return new ResponseEntity<>("Nothing Updated!", HttpStatus.BAD_REQUEST);

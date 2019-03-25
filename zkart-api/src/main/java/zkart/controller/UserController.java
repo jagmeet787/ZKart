@@ -7,12 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import zkart.entity.User;
+import zkart.service.EMailService;
 import zkart.service.UserService;
 
 @RestController
@@ -41,6 +43,35 @@ public class UserController {
 		
 		return authenticateUser(user, userDetails);
 	}
+	
+	@PostMapping("/resetPassword")
+	public User resetPassword(@RequestBody User user) {
+		User userDetails = userService.getUserByEmail(user.getEmail());
+		if (userDetails == null)
+			return null;
+		String secret = generateRandomPassword();
+		userDetails.setPassword(secret);
+		userDetails.setSecret(secret);
+		userService.updateUser(userDetails);
+		EMailService.sendEmail(userDetails.getEmail(), 
+				"Your new Password for ZKart.", 
+				"Hello " + userDetails.getFirstName() + " " + userDetails.getLastName()
+				+ ",<br>" + "We have recieved your request for resetting password.<br>"
+				+ "Your new password is <b>" + userDetails.getSecret() + "</b>.<br>"
+				+ "Use this password to login in ZKart.<br>");
+		return userDetails;
+	}
+	
+	public String generateRandomPassword() {
+		String alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz";
+		StringBuilder sb = new StringBuilder(8);
+		for(int i = 0; i < 8; i++) {
+			int index = (int) (alphabets.length() * Math.random());
+			sb.append(alphabets.charAt(index));
+		}
+		return sb.toString();
+	}
+
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/gmail")
 	public User getUserByGmail(@RequestBody User user) {
@@ -72,9 +103,10 @@ public class UserController {
 		return new ResponseEntity<>("Error!", HttpStatus.BAD_REQUEST);
 	}
 	
-	//need to impelmented not working
-	@RequestMapping(method = RequestMethod.PUT, value = "/update")
-	public ResponseEntity<String> updateUser(@RequestBody User user) {
+	//need to send id along with the object
+	@RequestMapping(method = RequestMethod.PUT, value = "/update/{id}")
+	public ResponseEntity<String> updateUser(@PathVariable("id") Integer id, @RequestBody User user) {
+		user.setId(id);
 		if (userService.updateUser(user))
 			return new ResponseEntity<>("Success.", HttpStatus.OK);
 		return new ResponseEntity<>("Nothing Updated!", HttpStatus.BAD_REQUEST);
