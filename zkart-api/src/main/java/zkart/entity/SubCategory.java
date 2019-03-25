@@ -19,13 +19,22 @@ public class SubCategory {
     @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	
+
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
-        @JoinColumn(name="CATEGORYID", referencedColumnName="ID")
+        @JoinColumn(name="CATEGORYID", referencedColumnName="ID",nullable=false)
     })
 	private Category category;
 	private String subcategoryName;
+	
+	public Category getCategory() {
+		return category;
+	}
 
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 	public Integer getId() {
 		return id;
 	}

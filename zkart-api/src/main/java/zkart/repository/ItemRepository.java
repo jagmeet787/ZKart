@@ -12,5 +12,6 @@ import zkart.entity.Item;
 public interface ItemRepository extends CrudRepository<Item, Integer> {
 	
 	public Item findAllByItemId(String itemId);
+	public ArrayList<Item> findAllBySubCategoryId(Integer subcategoryId);
 	
 }

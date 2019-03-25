@@ -29,10 +29,10 @@ public class StorageService {
         try {
             InputStream is = file.getInputStream();
             String path = "";
-            
+            System.out.println("storage service");
             if (System.getProperty("os.name").toLowerCase().contains("windows")) 
             	path = "C:\\itemImages\\";
-            else path = "/home/itemImages/";
+            else path = "/home/satyam/Desktop/itemImages/";
             
             Path dest=Paths.get(path+fileName);
             
