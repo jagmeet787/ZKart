@@ -51,4 +51,8 @@ public class OrdersService {
 		ordersRepository.deleteById(id);
 	}
 
+	public Orders getOrderById(Integer id) {
+		return ordersRepository.findById(id).get();
+	}
+
 }

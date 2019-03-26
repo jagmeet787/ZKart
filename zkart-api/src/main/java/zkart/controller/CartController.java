@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import zkart.entity.Cart;
+import zkart.entity.User;
 import zkart.service.CartService;
 @CrossOrigin( origins = "*" )
 @RestController
@@ -37,21 +38,35 @@ public class CartController {
 		return cartService.getCartItemByUserId(userId);
 	}
 
-	@RequestMapping(value = "/user/listingid/{itemId}/{userId}", method = RequestMethod.POST)
+	@GetMapping(value = "/user/listingid/{itemId}/{userId}")
 	public Cart getCartItemsByItemId(@PathVariable("itemId") String itemId, @PathVariable("userId") Integer userId) {
+		System.out.println("getCartItemsByItemId()");
+		System.out.println("itemId: " + itemId);
+		System.out.println("userId: " + userId);
 		return cartService.getCartItemByItemId(itemId, userId);
 	}
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public ResponseEntity<String> addCartItem(@RequestBody Cart cart) {
+	@RequestMapping(value = "/create/{userId}", method = RequestMethod.POST)
+	public ResponseEntity<String> addCartItem(@RequestBody Cart cart, 
+			@PathVariable("userId") Integer userId) {
+		if (cart == null)
+			return new ResponseEntity<>("Empty cart object.", HttpStatus.BAD_REQUEST);
+		
+		User user = new User(userId);
+		cart.setUser(user);
+		
 		if (cartService.addToCart(cart)) 
 			return new ResponseEntity<>("Added to cart.", HttpStatus.OK);
+		
 		return new ResponseEntity<>("Unable to add to cart.", HttpStatus.BAD_REQUEST);
+		
 	}
 
 	@RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<String> updateCartItem(@PathVariable("id") Integer id, Cart cart) {
+		Cart cartDetails = cartService.getCartItemById(id);
 		cart.setId(id);
+		cart.setUser(cartDetails.getUser());
 		if(cartService.updateOrder(cart))
 			return new ResponseEntity<>("Success.", HttpStatus.OK);
 		return new ResponseEntity<>("Nothing Updated!", HttpStatus.BAD_REQUEST);

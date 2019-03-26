@@ -26,18 +26,22 @@ public class Review {
 	private User user;
 	private Integer stars;
 	private String review;
-	private Integer sellerId;
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumns({
+        @JoinColumn(name="SELLERID", referencedColumnName="ID")
+    })
+	private User seller;
 
 	public Review() {
 	}
 
-	public Review(Integer id, Item item, User user, Integer stars, String review, Integer sellerId) {
+	public Review(Integer id, Item item, User user, Integer stars, String review, User seller) {
 		this.id = id;
 		this.item = item;
 		this.user = user;
 		this.stars = stars;
 		this.review = review;
-		this.sellerId = sellerId;
+		this.seller = seller;
 	}
 
 	public Integer getId() {
@@ -80,17 +84,17 @@ public class Review {
 		this.review = review;
 	}
 
-	public Integer getSellerId() {
-		return sellerId;
+	public User getSeller() {
+		return seller;
 	}
 
-	public void setSellerId(Integer sellerId) {
-		this.sellerId = sellerId;
+	public void setSeller(User seller) {
+		this.seller = seller;
 	}
 
 	@Override
 	public String toString() {
 		return "Review [id=" + id + ", item=" + item + ", user=" + user + ", stars=" + stars + ", review=" + review
-				+ ", sellerId=" + sellerId + "]";
+				+ ", sellerId=" + seller + "]";
 	}
 }

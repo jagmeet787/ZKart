@@ -14,7 +14,6 @@ public class Orders {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
-	private String shippingAddress;
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
         @JoinColumn(name="USERID", referencedColumnName="ID")
@@ -22,6 +21,7 @@ public class Orders {
 	private User user; //
 	private String itemId;
 	private Integer orderId;
+	private String shippingAddress;
 	private String orderStatus;
 	private String orderDate;
 	private String recievedDate;
