@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +16,13 @@ import zkart.entity.Category;
 import zkart.entity.Item;
 import zkart.service.CategoryService;
 
+@CrossOrigin( origins = "*" )
 @RestController
 @RequestMapping(path="/categories")
 public class CategoryController {
 	
 	@Autowired
 	private CategoryService categoryService;
-	
 	@RequestMapping()
 	public ResponseEntity<ArrayList<Category>> getZkartCategories(){
 		return new ResponseEntity<>(categoryService.getZkartCategories(),HttpStatus.OK);

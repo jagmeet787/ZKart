@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import zkart.entity.Item;
 import zkart.service.ItemService;
 import zkart.service.StorageService;
 
+@CrossOrigin( origins = "*" )
 @RestController
 @RequestMapping(path="/item")
 public class ItemController {
@@ -43,9 +45,9 @@ public class ItemController {
 	
 	@RequestMapping()
 	public ResponseEntity<ArrayList<Item>> getZkartItems(){
+		
 		return new ResponseEntity<>(itemService.getZkartItems(),HttpStatus.OK);
 	}
-	
 	@RequestMapping("/{id}")
 	public ResponseEntity<Item> getZkartItemById(@PathVariable("id") int id){
 		return new ResponseEntity<>(itemService.getZkartItemById(id),HttpStatus.OK);
