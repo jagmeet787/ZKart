@@ -55,9 +55,14 @@ public class ItemController {
 	
 	@RequestMapping("/item/{id}")
 	public ResponseEntity<Item> getZkartItemByItemId(@PathVariable("id") String itemId){
+		
+		System.out.println(itemId);
 		return new ResponseEntity<>(itemService.getZkartItemByItemId(itemId),HttpStatus.OK);
 	}
-	//@RequestMapping("/date/{id}")
+	@RequestMapping("/date/{id}")
+	public ResponseEntity<ArrayList<Item>> getFlopkartListingByDate(@PathVariable("id") int id) {
+		return new ResponseEntity<>(itemService.getFlopkartListingsSortedByDate(id),HttpStatus.OK);
+	}
 	
 	@RequestMapping(method=RequestMethod.PUT,value="/update/{id}")
 	public ResponseEntity<String> updateZkartItem(@PathVariable("id") int id,@RequestBody Item item){

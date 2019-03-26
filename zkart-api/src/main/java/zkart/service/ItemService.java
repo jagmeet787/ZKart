@@ -54,6 +54,18 @@ public class ItemService {
 		}
 		return items;	
 	}
+	
+	public ArrayList<Item> getFlopkartListingsSortedByDate(Integer id)
+	{
+		ArrayList<Item> items=new ArrayList<Item>();
+		Iterable<Item> iterable=itemRepository.findAll();
+		Iterator<Item> iterator=iterable.iterator();
+		while(iterator.hasNext()) {
+			items.add(iterator.next());
+		}
+		return items;
+	}
+	
 	public Item getZkartItemById(Integer id) {
 		return itemRepository.findById(id).get();
 	}
