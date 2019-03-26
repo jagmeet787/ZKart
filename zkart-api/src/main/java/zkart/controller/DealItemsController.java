@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,5 +34,8 @@ public class DealItemsController {
 	public ResponseEntity<ArrayList<Dealitems>> getZkartDealItems() {
 			return new ResponseEntity<>(dealItemService.getAllDealItems(),HttpStatus.OK);
 	}
-
+	@RequestMapping("/seller/{id}")
+	public ResponseEntity<ArrayList<Dealitems>> getZkartDealItemsBySellerId(@PathVariable("id") Integer sellerId){
+		return new ResponseEntity<ArrayList<Dealitems>>(dealItemService.getAllItemsBySellerId(sellerId),HttpStatus.OK);
+	}
 }

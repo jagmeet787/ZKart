@@ -29,17 +29,19 @@ public class ItemService {
 	@Autowired
 	private UserService userService;
 	
-	public boolean addItem(MultipartFile file,String formData) {
+	public String addItem(MultipartFile file,String formData) {
 		Item item=null;
-		boolean res=true;
+		String res="-1";
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			item = mapper.readValue(formData, Item.class);
 			item=itemRepository.save(item);
+			item.setImgUrl(item.getId()+".jpeg");
+			res=item.getId().toString();
 			System.out.println("item saved");
-			storageService.uploadFile(file,item.getItemId().toString());
+			storageService.uploadFile(file,item.getId().toString()+".jpeg");
 		}catch(Exception e) {
-			res=false;
+			res="-1";
 			System.out.println("error"+e);
 		}
 		return res;

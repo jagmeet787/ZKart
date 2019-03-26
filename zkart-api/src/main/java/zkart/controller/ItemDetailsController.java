@@ -29,7 +29,17 @@ public class ItemDetailsController {
 			return new ResponseEntity<>("success",HttpStatus.OK);
 		}
 	}
-	
+	@RequestMapping(method=RequestMethod.POST,value="/addItems")
+	public ResponseEntity<String> addZkartMultipleItemDetails(@RequestBody ArrayList<ItemDetails> itemDetails){
+		Boolean res=true;
+		for(Integer i=0;i<itemDetails.size();i++) {
+			System.out.println(i);
+			//System.out.println(itemDetails.get(i));
+			res=itemDetailsService.addZkartItemDetails(itemDetails.get(i));
+			System.out.println(res);
+		}
+		return new ResponseEntity<>(res.toString(),HttpStatus.OK);
+	}
 	@RequestMapping("/itemid/{id}")
 	public ResponseEntity<ArrayList<ItemDetails>> getZkartItemDetails(@PathVariable("id") int id){
 		return new ResponseEntity<>(itemDetailsService.getZkartItemDetails(id),HttpStatus.OK);
