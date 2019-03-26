@@ -16,14 +16,14 @@ import zkart.entity.Category;
 import zkart.entity.Item;
 import zkart.service.CategoryService;
 
+@CrossOrigin( origins = "*" )
 @RestController
 @RequestMapping(path="/categories")
 public class CategoryController {
 	
 	@Autowired
 	private CategoryService categoryService;
-	
-	@CrossOrigin
+
 	@RequestMapping()
 	public ResponseEntity<ArrayList<Category>> getZkartCategories(){
 		return new ResponseEntity<>(categoryService.getZkartCategories(),HttpStatus.OK);

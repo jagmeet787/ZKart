@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import zkart.entity.Item;
 import zkart.service.ItemService;
 import zkart.service.StorageService;
 
+@CrossOrigin( origins = "*" )
 @RestController
 @RequestMapping(path="/item")
 public class ItemController {
@@ -43,9 +45,9 @@ public class ItemController {
 	
 	@RequestMapping()
 	public ResponseEntity<ArrayList<Item>> getZkartItems(){
+		
 		return new ResponseEntity<>(itemService.getZkartItems(),HttpStatus.OK);
 	}
-	
 	@RequestMapping("/{id}")
 	public ResponseEntity<Item> getZkartItemById(@PathVariable("id") int id){
 		return new ResponseEntity<>(itemService.getZkartItemById(id),HttpStatus.OK);
@@ -68,10 +70,20 @@ public class ItemController {
 		
 	}
 	
+	@RequestMapping(method=RequestMethod.PUT,value="/update/quantity/{id}")
+	public ResponseEntity<String> updateItemQuantity(@PathVariable("id") int id,@RequestBody Item item){
+		Item itemDetails = itemService.getZkartItemById(id);
+		itemDetails.setQuantity(item.getQuantity());
+		boolean res = itemService.updateZkartItem(id, itemDetails);
+		if(res)
+			return new ResponseEntity<>("updated",HttpStatus.OK);
+		return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);		
+	}
+	
 	@RequestMapping(method=RequestMethod.DELETE,value="/delete/{id}")
 	public ResponseEntity<String> deleteZkartItem(@PathVariable("id") Integer id){
 		boolean res=itemService.deleteZkartItem(id);
-		if(res==false) {
+		if(res==true) {
 			return new ResponseEntity<>("updated",HttpStatus.OK);
 		}else {
 			return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
@@ -87,16 +99,11 @@ public class ItemController {
 	public ResponseEntity<ArrayList<Item>> getZkartItemsByCategoryId(@PathVariable("id") Integer id){
 		return new ResponseEntity<>(itemService.getAllItemsByCategoryId(id),HttpStatus.OK);
 	}
-	/*@GET
-	@Path("/category/{id}")
-	@Produces("application/json")
-	public List<FlopkartListing> getListingByCategoryId(@PathParam("id") int id) {
-		FlopkartListingDAO dao = new FlopkartListingDAO();
-		List<FlopkartListing> listing_details = dao.getFlopkartListingBycategoryId(id);
-		if (listing_details == null)
-			return null;
-		else
-			return listing_details;
-	}*/
 	
+	@RequestMapping(method=RequestMethod.GET,value="/seller/{id}")
+	public ResponseEntity<ArrayList<Item>> getZkartItemsBySellerId(@PathVariable("id") Integer id){
+		return new ResponseEntity<>(itemService.getZkartItemsBySellerId(id),HttpStatus.OK);
+	}
+	
+
 }

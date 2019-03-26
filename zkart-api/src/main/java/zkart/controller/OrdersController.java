@@ -7,10 +7,12 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +23,7 @@ import zkart.service.AccountService;
 import zkart.service.OrdersService;
 import zkart.service.UserService;
 
-
+@CrossOrigin( origins = "*" )
 @RestController
 @RequestMapping("/orders")
 public class OrdersController {
@@ -59,7 +61,7 @@ public class OrdersController {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<String> createOrder(Orders order) {
+	public ResponseEntity<String> createOrder(@RequestBody Orders order) {
 
 		if (!ordersService.createOrder(order)) 
 			return new ResponseEntity<>("Failed to Create Order.", HttpStatus.BAD_REQUEST);
@@ -67,7 +69,7 @@ public class OrdersController {
 		//		return new ResponseEntity<>("Nothing Updated!", HttpStatus.BAD_REQUEST);
 
 		// PAYMENT_RECIEVED and ORDER_FAILED
-		if (order.getOrderStatus().equals("PAYMENT_RECIEVED")) {
+		if (order.getOrderStatus().equals("PAYMENT_RECEIVED")) {
 			ordersService.updateOrder(order);
 			Account userAccount = accountService.getAccountByAccountNumber(order.getBuyerAccountNo());
 			Account zkartAccount = accountService.getAccountByUserId(ZKART_USERID);
@@ -86,8 +88,9 @@ public class OrdersController {
 		return new ResponseEntity<>("Success.", HttpStatus.OK);
 	}
 
+	// must send all the details of order else rest fields will be null
 	@PutMapping("/update/{id}")
-	public ResponseEntity<String> updateOrder(@PathVariable("id") Integer id, Orders order) {
+	public ResponseEntity<String> updateOrder(@PathVariable("id") Integer id,@RequestBody Orders order) {
 		order.setId(id);
 		if(ordersService.updateOrder(order))
 			return new ResponseEntity<>("Success.", HttpStatus.OK);
@@ -95,7 +98,7 @@ public class OrdersController {
 	}
 
 	@RequestMapping(value = "/update/orderid/{orderId}", method = RequestMethod.PUT)
-	public ResponseEntity<String> updateOrderbyOrderId(@PathVariable("orderId") Integer orderId, Orders order) {
+	public ResponseEntity<String> updateOrderbyOrderId(@PathVariable("orderId") Integer orderId,@RequestBody Orders order) {
 		List<Orders> orderDetails = ordersService.getAllOrdersByOrdersId(orderId);
 		if (orderDetails != null) {
 			Orders o = orderDetails.get(0);
@@ -107,7 +110,7 @@ public class OrdersController {
 	}
 
 	@PutMapping("/update/orderid")
-	public ResponseEntity<String> updateOrderByOrderId(Orders order) {
+	public ResponseEntity<String> updateOrderByOrderId(@RequestBody Orders order) {
 		/**
 		 * add recieved date to the database column if (item_shipped) seller has shipped
 		 * the item just update the order database
@@ -141,11 +144,12 @@ public class OrdersController {
 		System.out.println(orderStatus + "status print " + orderStatus.equals("PAYMENT_RECIEVED"));
 		
 		if (orderStatus.equals("ORDER_SHIPPED") || orderStatus.equals("ORDER_RETURNED")) {
-			ordersService.updateOrder(order);
+			orderDetails.setOrderStatus(orderStatus);
+			ordersService.updateOrder(orderDetails);
 		} else if (orderStatus.equals("ORDER_TERMINATED") || orderStatus.equals("ORDER_CANCELLED") || orderStatus.equals("ORDER_COMPLETED_AND_RETURNED")) {
 			
-			order.setOrderStatus("ORDER_TERMINATED");
-			ordersService.updateOrder(order);
+			orderDetails.setOrderStatus(orderStatus);
+			ordersService.updateOrder(orderDetails);
 			
 			Account userAccount = accountService.getAccountByAccountNumber(order.getBuyerAccountNo());
 			Account zkartAccount = accountService.getAccountByUserId(ZKART_USERID);
@@ -163,8 +167,8 @@ public class OrdersController {
 
 		} else if (orderStatus.equals("ORDER_COMPLETED") || orderStatus.equals("ORDER_RECIEVED")) {
 			
-			order.setOrderStatus("ORDER_COMPLETED");
-			ordersService.updateOrder(order);
+			orderDetails.setOrderStatus(orderStatus);
+			ordersService.updateOrder(orderDetails);
 
 			// do a transation from zkart account to the seller account
 			String itemId = order.getItemId();
