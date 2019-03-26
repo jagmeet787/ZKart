@@ -34,12 +34,8 @@ public class ItemController {
 		
 	@RequestMapping(method = RequestMethod.POST, value = "/addItem")
 	public ResponseEntity<String> addItem(@RequestParam(value = "formData", required = false) String formData,@RequestParam("file") MultipartFile file) {
-		boolean res=itemService.addItem(file,formData);
-		if(res==true) {
-			return new ResponseEntity<>("item added",HttpStatus.OK);
-		}else {
-			return new ResponseEntity<>("There is an error while addding an item",HttpStatus.BAD_REQUEST);
-		}
+		String res=itemService.addItem(file,formData);
+			return new ResponseEntity<>(res,HttpStatus.OK);
 		//storageService.uploadFile(file,formData);
 	}
 	
@@ -55,9 +51,14 @@ public class ItemController {
 	
 	@RequestMapping("/item/{id}")
 	public ResponseEntity<Item> getZkartItemByItemId(@PathVariable("id") String itemId){
+		
+		System.out.println(itemId);
 		return new ResponseEntity<>(itemService.getZkartItemByItemId(itemId),HttpStatus.OK);
 	}
-	//@RequestMapping("/date/{id}")
+	@RequestMapping("/date/{id}")
+	public ResponseEntity<ArrayList<Item>> getFlopkartListingByDate(@PathVariable("id") int id) {
+		return new ResponseEntity<>(itemService.getFlopkartListingsSortedByDate(id),HttpStatus.OK);
+	}
 	
 	@RequestMapping(method=RequestMethod.PUT,value="/update/{id}")
 	public ResponseEntity<String> updateZkartItem(@PathVariable("id") int id,@RequestBody Item item){
