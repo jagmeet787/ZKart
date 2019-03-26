@@ -37,6 +37,7 @@ public class ItemService {
 			item = mapper.readValue(formData, Item.class);
 			item=itemRepository.save(item);
 			item.setImgUrl(item.getId()+".jpeg");
+			item=itemRepository.save(item);
 			res=item.getId().toString();
 			System.out.println("item saved");
 			storageService.uploadFile(file,item.getId().toString()+".jpeg");
