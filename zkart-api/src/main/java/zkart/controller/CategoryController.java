@@ -23,6 +23,7 @@ public class CategoryController {
 	
 	@Autowired
 	private CategoryService categoryService;
+
 	@RequestMapping()
 	public ResponseEntity<ArrayList<Category>> getZkartCategories(){
 		return new ResponseEntity<>(categoryService.getZkartCategories(),HttpStatus.OK);
@@ -35,6 +36,7 @@ public class CategoryController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/create")
 	public ResponseEntity<String> addZkartCategory(@RequestBody Category category){
+		System.out.println("hello");
 		if(categoryService.addZkartCategory(category)==true) {
 			return new ResponseEntity<>("category added",HttpStatus.OK);
 		}else {

@@ -36,6 +36,7 @@ public class AccountController {
 
 	@RequestMapping(value = "/user/{userId}", produces = "application/JSON")
 	public Account getAccountByUserId(@PathVariable("userId") Integer userId) {
+		System.out.println("this function");
 		System.out.println("userId: " + userId + ", " + accountService.getAccountByUserId(userId));
 		return accountService.getAccountByUserId(userId);
 	}
@@ -90,7 +91,7 @@ public class AccountController {
 			return new ResponseEntity<>("Enter amount.", HttpStatus.BAD_REQUEST);
 		
 		Account accountDetails = accountService.getAccountByAccountNumber(account.getAccountNumber());
-		if(account.getPin() != accountDetails.getPin())
+		if(!account.getPin().equals(accountDetails.getPin()))
 			return new ResponseEntity<>("Incorrect PIN.", HttpStatus.BAD_REQUEST);
 
 		accountDetails.setBalance(account.getBalance());
