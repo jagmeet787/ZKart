@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 	
+	@CrossOrigin
 	@RequestMapping()
 	public ResponseEntity<ArrayList<Category>> getZkartCategories(){
 		return new ResponseEntity<>(categoryService.getZkartCategories(),HttpStatus.OK);
@@ -34,6 +36,7 @@ public class CategoryController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/create")
 	public ResponseEntity<String> addZkartCategory(@RequestBody Category category){
+		System.out.println("hello");
 		if(categoryService.addZkartCategory(category)==true) {
 			return new ResponseEntity<>("category added",HttpStatus.OK);
 		}else {
