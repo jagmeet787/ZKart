@@ -21,7 +21,8 @@ import zkart.service.DealService;
 public class DealController {
 	@Autowired
 	private DealService dealService;
-	
+
+	@CrossOrigin( origins = "*" )
 	@RequestMapping(method=RequestMethod.POST,value="/create")
 	ResponseEntity<String> addZkartDeal(@RequestBody Deal deal){
 		System.out.println(deal);
@@ -32,21 +33,26 @@ public class DealController {
 			return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@CrossOrigin( origins = "*" )
 	@RequestMapping()
 	ResponseEntity<ArrayList<Deal>> getZkartDeals(){
 		return new ResponseEntity<>(dealService.getZkartDeals(),HttpStatus.OK);
 	}
 	
+	@CrossOrigin( origins = "*" )
 	@RequestMapping(method=RequestMethod.GET,value="/{id}")
 	ResponseEntity<Deal> getZkartDealsById(@PathVariable Integer id){
 		return new ResponseEntity<>(dealService.getZkartById(id),HttpStatus.OK);
 	}
 	
+	@CrossOrigin( origins = "*" )
 	@RequestMapping(method=RequestMethod.GET,value="/item/{id}")
 	ResponseEntity<ArrayList<Deal>> getZkartDealByItemId(@PathVariable Integer id){
 		return new ResponseEntity<>(dealService.getZkartDealsByItemId(id),HttpStatus.OK);
 	}
 	
+	@CrossOrigin( origins = "*" )
 	@RequestMapping(method=RequestMethod.GET,value="/seller/{id}")
 	ResponseEntity<ArrayList<Deal>> getZkartDealsBySellerId(@PathVariable("id") Integer sellerId){
 		return new ResponseEntity<>(dealService.getZkartDealsBySellerId(sellerId),HttpStatus.OK);
