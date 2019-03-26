@@ -63,11 +63,11 @@ public class CartController {
 	}
 
 	@RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<String> updateCartItem(@PathVariable("id") Integer id, Cart cart) {
+	public ResponseEntity<String> updateCartItem(@PathVariable("id") Integer id, @RequestBody Cart cart) {
 		Cart cartDetails = cartService.getCartItemById(id);
-		cart.setId(id);
-		cart.setUser(cartDetails.getUser());
-		if(cartService.updateOrder(cart))
+		cartDetails.setQuantity(cart.getQuantity());
+		System.out.println(cartDetails);
+		if(cartService.updateOrder(cartDetails))
 			return new ResponseEntity<>("Success.", HttpStatus.OK);
 		return new ResponseEntity<>("Nothing Updated!", HttpStatus.BAD_REQUEST);
 	}
