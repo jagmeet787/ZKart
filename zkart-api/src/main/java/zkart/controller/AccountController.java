@@ -114,5 +114,11 @@ public class AccountController {
 			return new ResponseEntity<>("Success.", HttpStatus.OK);
 		return new ResponseEntity<>("Nothing Updated!", HttpStatus.BAD_REQUEST);
 	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/delete/{id}")
+	public ResponseEntity<String> delteAccount(@PathVariable Integer id) {
+		accountService.deleteAccountById(id);
+		return new ResponseEntity<>("Deleted.", HttpStatus.OK);
+	}
 
 }
