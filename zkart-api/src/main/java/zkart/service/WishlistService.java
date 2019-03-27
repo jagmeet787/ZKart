@@ -56,6 +56,7 @@ public class WishlistService {
 				result=wishlist;
 			}
 		}
+		System.out.println(result);
 		return result;
 	}
 	/*ArrayList<Account> list = new ArrayList<Account>();
