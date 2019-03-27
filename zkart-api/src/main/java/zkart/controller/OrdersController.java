@@ -134,7 +134,7 @@ public class OrdersController {
 		 * 0 PAYMENT_RECIEVED 
 		 * 1 ORDER_FAILED 
 		 * 2 ORDER_SHIPPED 
-		 * 3 ORDER_RECIEVED 
+		 * 3 ORDER_RECEIVED 
 		 * 4 ORDER_CANCELLED 
 		 * 5 ORDER_RETURNED x
 		 * 6 ORDER_COMPLETED 
@@ -171,7 +171,7 @@ public class OrdersController {
 			accountService.updateAccount(zkartAccount);
 			accountService.updateAccount(userAccount);
 
-		} else if (orderStatus.equals("ORDER_COMPLETED") || orderStatus.equals("ORDER_RECIEVED")) {
+		} else if (orderStatus.equals("ORDER_COMPLETED") || orderStatus.equals("ORDER_RECEIVED")) {
 			
 			orderDetails.setOrderStatus("ORDER_COMPLETED");
 			ordersService.updateOrder(orderDetails);
