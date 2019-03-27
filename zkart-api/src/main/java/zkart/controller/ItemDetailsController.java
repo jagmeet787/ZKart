@@ -44,4 +44,9 @@ public class ItemDetailsController {
 	public ResponseEntity<ArrayList<ItemDetails>> getZkartItemDetails(@PathVariable("id") int id){
 		return new ResponseEntity<>(itemDetailsService.getZkartItemDetails(id),HttpStatus.OK);
 	}
+	@RequestMapping(value = "/delete/{itemId}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> deleteByItemId(@PathVariable Integer itemId) {
+		itemDetailsService.deleteByItemId(itemId);
+		return new ResponseEntity<>("Deleted", HttpStatus.OK);
+	}
 }

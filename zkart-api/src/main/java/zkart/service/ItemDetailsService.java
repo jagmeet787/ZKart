@@ -31,4 +31,8 @@ public class ItemDetailsService {
 		itemDetailsRepository.findAllByItemId(itemId).forEach(list::add);
 		return list;
 	}
+
+	public void deleteByItemId(Integer itemId) {
+		itemDetailsRepository.deleteAllByItemId(itemId);
+	}
 }

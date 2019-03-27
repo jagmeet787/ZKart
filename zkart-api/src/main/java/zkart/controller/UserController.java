@@ -37,7 +37,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/email")
-	public User getUserByEmail(@RequestBody User user) {
+	public ResponseEntity<User> getUserByEmail(@RequestBody User user) {
 		User userDetails = userService.getUserByEmail(user.getEmail());
 		
 		System.out.println("getUserbyEmail(): user: " + user);
@@ -81,19 +81,19 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/phone")
-	public User getUserbyPhone(@RequestBody User user) {
+	public ResponseEntity<User> getUserbyPhone(@RequestBody User user) {
 		System.out.println(user);
 		User userDetails = userService.getUserByPhone(user.getPhone());
 		return authenticateUser(user, userDetails);
 	}
 	
-	private User authenticateUser(User user, User userDetails) {
+	private ResponseEntity<User> authenticateUser(User user, User userDetails) {
 		if (userDetails == null)
-			return null;
+			return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
 		if ( !( user.getPassword().equals(userDetails.getPassword()) ) )
-			return user;
+			return new ResponseEntity<>(user, HttpStatus.UNAUTHORIZED);
 		else
-			return userDetails;
+			return new ResponseEntity<>(userDetails, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/create")
