@@ -69,6 +69,7 @@ public class OrdersController {
 
 		// PAYMENT_RECIEVED and ORDER_FAILED
 		if (order.getOrderStatus().equals("PAYMENT_RECEIVED")) {
+			System.out.println(order);
 			order.setTotalAmount(order.getTotalAmount() + DELIVERY_CHARGES);
 			if (!ordersService.createOrder(order)) 
 				return new ResponseEntity<>("Failed to Create Order.", HttpStatus.BAD_REQUEST);
@@ -79,8 +80,8 @@ public class OrdersController {
 			System.out.println(zkartAccount);
 
 			// Update balance
-			userAccount.setBalance(userAccount.getBalance() - order.getTotalAmount() - DELIVERY_CHARGES);
-			zkartAccount.setBalance(zkartAccount.getBalance() + order.getTotalAmount()  + DELIVERY_CHARGES);
+			userAccount.setBalance(userAccount.getBalance() - order.getTotalAmount() );
+			zkartAccount.setBalance(zkartAccount.getBalance() + order.getTotalAmount() );
 			// write updated balance to database
 			accountService.updateAccount(zkartAccount);
 			accountService.updateAccount(userAccount);
@@ -172,7 +173,7 @@ public class OrdersController {
 
 		} else if (orderStatus.equals("ORDER_COMPLETED") || orderStatus.equals("ORDER_RECIEVED")) {
 			
-			orderDetails.setOrderStatus(orderStatus);
+			orderDetails.setOrderStatus("ORDER_COMPLETED");
 			ordersService.updateOrder(orderDetails);
 
 			// do a transation from zkart account to the seller account
