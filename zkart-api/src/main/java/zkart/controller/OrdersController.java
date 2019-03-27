@@ -30,6 +30,7 @@ public class OrdersController {
 
 	static final Integer ZKART_USERID = 26;
 	static final Integer RETURN_DAYS = 15;
+	static final Integer DELIVERY_CHARGES = 50;
 	
 	@Autowired
 	OrdersService ordersService;
@@ -62,14 +63,15 @@ public class OrdersController {
 	
 	@PostMapping("/create")
 	public ResponseEntity<String> createOrder(@RequestBody Orders order) {
-		if (!ordersService.createOrder(order)) 
-			return new ResponseEntity<>("Failed to Create Order.", HttpStatus.BAD_REQUEST);
+		
 		//		return new ResponseEntity<>("Success.", HttpStatus.OK);
 		//		return new ResponseEntity<>("Nothing Updated!", HttpStatus.BAD_REQUEST);
 
 		// PAYMENT_RECIEVED and ORDER_FAILED
 		if (order.getOrderStatus().equals("PAYMENT_RECEIVED")) {
-			ordersService.updateOrder(order);
+			order.setTotalAmount(order.getTotalAmount() + DELIVERY_CHARGES);
+			if (!ordersService.createOrder(order)) 
+				return new ResponseEntity<>("Failed to Create Order.", HttpStatus.BAD_REQUEST);
 			Account userAccount = accountService.getAccountByAccountNumber(order.getBuyerAccountNo());
 			Account zkartAccount = accountService.getAccountByUserId(ZKART_USERID);
 
@@ -77,11 +79,15 @@ public class OrdersController {
 			System.out.println(zkartAccount);
 
 			// Update balance
-			userAccount.setBalance(userAccount.getBalance() - order.getTotalAmount());
-			zkartAccount.setBalance(zkartAccount.getBalance() + order.getTotalAmount());
+			userAccount.setBalance(userAccount.getBalance() - order.getTotalAmount() - DELIVERY_CHARGES);
+			zkartAccount.setBalance(zkartAccount.getBalance() + order.getTotalAmount()  + DELIVERY_CHARGES);
 			// write updated balance to database
 			accountService.updateAccount(zkartAccount);
 			accountService.updateAccount(userAccount);
+		} else {
+			if (!ordersService.createOrder(order)) 
+				return new ResponseEntity<>("Failed to Create Order.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Order Failed.", HttpStatus.OK);
 		}
 		
 		return new ResponseEntity<>("Success.", HttpStatus.OK);
