@@ -31,17 +31,20 @@ public class ReviewController {
 	
 	@PostMapping("/create")
 	public ResponseEntity<String> addReview(@RequestBody Review review) {
+		System.out.println(review);
 		List<Review> reviews = reviewService.getAllReviewByUserId(review.getUser().getId());
-		for(Review r : reviews) {
-			if(r.getItem().getId() == review.getItem().getId()) {
-				review.setId(r.getId());
-				if(reviewService.saveReview(review)) {
-					return new ResponseEntity<>("Success.", HttpStatus.OK);
-				} else {
-					return new ResponseEntity<>("Error!", HttpStatus.BAD_REQUEST);
+		System.out.println(reviews);
+		if(reviews != null)
+			for(Review r : reviews) {
+				if(r.getItem().getId() == review.getItem().getId()) {
+					review.setId(r.getId());
+					if(reviewService.saveReview(review)) {
+						return new ResponseEntity<>("Success.", HttpStatus.OK);
+					} else {
+						return new ResponseEntity<>("Error!", HttpStatus.BAD_REQUEST);
+					}
 				}
 			}
-		}
 		if(reviewService.saveReview(review))
 			return new ResponseEntity<>("Success.", HttpStatus.OK);
 		return new ResponseEntity<>("Error!", HttpStatus.BAD_REQUEST);

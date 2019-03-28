@@ -166,7 +166,7 @@ public class Item{
 
 	@Override
 	public String toString() {
-		return "FlopkartListing [id=" + id + ", listingName=" + listingName + ", imgUrl=" + imgUrl + ", itemId="
+		return "Item [id=" + id + ", listingName=" + listingName + ", imgUrl=" + imgUrl + ", itemId="
 				+ itemId +  ", quantity=" + quantity
 				+ ", price=" + price + ", colour=" + colour + ", brand=" + brand + ", manufacture_Date="
 				+ manufacture_Date + ", description=" + description + ", priority=" + priority + ", discount="

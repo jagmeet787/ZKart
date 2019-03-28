@@ -38,7 +38,12 @@ public class ReviewService {
 
 	public List<Review> getAllReviewByUserId(Integer id) {
 		ArrayList<Review> list = new ArrayList<Review>();
-		reviewRepository.findAllByUserId(id).forEach(list::add);
+		try {
+			reviewRepository.findAllByUserId(id).forEach(list::add);
+		} catch(Exception e) {
+			e.printStackTrace();
+			list = null;
+		}
 		return list;
 	}
 
