@@ -19,6 +19,9 @@ public class Cart {
 	private User user;
 	private String itemId;
 	private Integer quantity;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumns({ @JoinColumn(name = "DEALID", referencedColumnName = "ID") })
+	private Deal deal;
 
 	public Cart() {
 	}
@@ -28,6 +31,14 @@ public class Cart {
 		this.user = user;
 		this.itemId = itemId;
 		this.quantity = quantity;
+	}
+	
+	public Deal getDeal() {
+		return deal;
+	}
+
+	public void setDeal(Deal deal) {
+		this.deal = deal;
 	}
 
 	public Integer getId() {

@@ -20,6 +20,8 @@ public class Deal {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	private String description;
+	private String startDate;
+	private String endDate;
 	private Integer discount;
 	
 	public Integer getId() {
@@ -33,6 +35,19 @@ public class Deal {
 		this.id = id;
 		this.description = description;
 		this.discount = discount;
+	}
+	
+	public String getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+	public String getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
 	}
 	public void setId(Integer id) {
 		this.id = id;
