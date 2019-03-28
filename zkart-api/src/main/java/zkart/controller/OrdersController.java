@@ -172,7 +172,6 @@ public class OrdersController {
 			accountService.updateAccount(userAccount);
 
 		} else if (orderStatus.equals("ORDER_COMPLETED") || orderStatus.equals("ORDER_RECEIVED")) {
-			
 			orderDetails.setOrderStatus("ORDER_COMPLETED");
 			ordersService.updateOrder(orderDetails);
 
@@ -184,6 +183,7 @@ public class OrdersController {
 			String sellerEmail = "";
 			if (matcher.find())
 				sellerEmail = matcher.group(0);
+			System.out.println("Seller Email: " + sellerEmail);
 			Integer sellerUserId = userService.getUserByEmail(sellerEmail).getId();
 			System.out.println("sellerEmail " + sellerEmail + " sellerUserId:" + sellerUserId);
 			
