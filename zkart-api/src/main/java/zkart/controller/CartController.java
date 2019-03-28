@@ -43,6 +43,7 @@ public class CartController {
 		System.out.println("getCartItemsByItemId()");
 		System.out.println("itemId: " + itemId);
 		System.out.println("userId: " + userId);
+		
 		return cartService.getCartItemByItemId(itemId, userId);
 	}
 

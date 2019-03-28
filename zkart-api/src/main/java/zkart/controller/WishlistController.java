@@ -51,7 +51,8 @@ public class WishlistController {
 		return new ResponseEntity<>(wishlistService.getZkartWishlistByUserId(id),HttpStatus.OK);
 	}
     @RequestMapping(method=RequestMethod.DELETE,value="/delete/{id}")
-    public ResponseEntity<String> deleteZkartWishlist(@PathParam("id") Integer id){
+    public ResponseEntity<String> deleteZkartWishlist(@PathVariable("id") Integer id){
+    	System.out.println("hello "+ id);
     	if(wishlistService.deleteZkartWishlist(id)==true) {
     		return new ResponseEntity<>("success",HttpStatus.OK);
     	}else {

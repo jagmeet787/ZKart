@@ -28,7 +28,7 @@ import zkart.service.UserService;
 @RequestMapping("/orders")
 public class OrdersController {
 
-	static final Integer ZKART_USERID = 1;
+	static final Integer ZKART_USERID = 7;
 	static final Integer RETURN_DAYS = 15;
 	static final Integer DELIVERY_CHARGES = 50;
 	
