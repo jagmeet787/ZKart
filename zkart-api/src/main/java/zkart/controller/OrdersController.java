@@ -68,6 +68,7 @@ public class OrdersController {
 		//		return new ResponseEntity<>("Nothing Updated!", HttpStatus.BAD_REQUEST);
 
 		// PAYMENT_RECIEVED and ORDER_FAILED
+		System.out.println(order);
 		if (order.getOrderStatus().equals("PAYMENT_RECEIVED")) {
 			System.out.println(order);
 			order.setTotalAmount(order.getTotalAmount() + DELIVERY_CHARGES);

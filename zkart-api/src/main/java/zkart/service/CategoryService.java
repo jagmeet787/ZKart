@@ -39,8 +39,9 @@ public class CategoryService {
 		return res;
 	}
 	
-	public boolean updateZkartCategory(Category category,Integer id) {
-		category.setId(id);
+	public boolean updateZkartCategory(Category category) {
+		return categoryRepository.save(category)!=null;
+/*		category.setId(id);
 		boolean res=true;
 		try {
 			categoryRepository.save(category);
@@ -49,12 +50,66 @@ public class CategoryService {
 			System.out.println(e);
 		}
 		return res;
-	}
+	*/}
 	
 	public boolean deleteZkartCategory(Integer id) {
 		boolean res=true;
 		try {
 			categoryRepository.deleteById(id);
+		}catch(Exception e) {
+			res=false;
+			System.out.println(e);
+		}
+		return res;
+	}
+	
+	 	public boolean deleteZkartCategoryByName(String name) {
+		boolean res=false;
+		try {
+			ArrayList<Category> ar=getZkartCategories();
+			for(Category i : ar)
+			{
+				
+				if(i.getCategoryName().equals(name))
+				{
+					deleteZkartCategory(i.getId());
+					res=true;
+					System.out.println("deleted");
+					break;
+				}
+			}
+			return res;
+			
+		}catch(Exception e) {
+			res=false;
+			System.out.println(e);
+		}
+		return res;
+	}
+	
+	public boolean updateZkartCategoryByName(String existing, String newName) {
+		boolean res=false;
+		try {
+			ArrayList<Category> ar=getZkartCategories();
+			for(Category i : ar)
+			{
+				if(i.getCategoryName().equals(existing))
+				{
+					
+					i.setCategoryName(newName);
+					updateZkartCategory(i);
+					
+					/*
+					deleteZkartCategoryByName(existing);
+					i.setCategoryName(newName);
+					categoryRepository.save(i);
+					*/
+					res=true;
+					System.out.println("updated");
+					break;
+				}
+			}
+			return res;
 		}catch(Exception e) {
 			res=false;
 			System.out.println(e);

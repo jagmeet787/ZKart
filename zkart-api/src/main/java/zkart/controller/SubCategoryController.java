@@ -44,7 +44,8 @@ public class SubCategoryController {
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/update/{id}")
 	public ResponseEntity<String> addZkartSubCategory(@PathVariable("id") Integer id,@RequestBody SubCategory subCategory){
-		if(subCategoryService.updateZkartSubCategory(subCategory,id)==true) {
+		subCategory.setId(id);
+		if(subCategoryService.updateZkartSubCategory(subCategory)==true) {
 			return new ResponseEntity<>("subCategory updated",HttpStatus.OK);
 		}else {
 			return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
@@ -52,7 +53,7 @@ public class SubCategoryController {
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/delete/{id}")
-	public ResponseEntity<String> addZkartSubCategory(@PathVariable("id") Integer id){
+	public ResponseEntity<String> deleteZkartSubCategory(@PathVariable("id") Integer id){
 		if(subCategoryService.deleteZkartSubCategory(id)==true) {
 			return new ResponseEntity<>("subCategory deleted",HttpStatus.OK);
 		}else {
@@ -60,7 +61,26 @@ public class SubCategoryController {
 		}
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/category/{id}")
-	public ResponseEntity<ArrayList<SubCategory>> getZkartItemsByCategoryId(@PathVariable("id") Integer id){
+	public ResponseEntity<ArrayList<SubCategory>> getZkartSubcategoriesByCategoryId(@PathVariable("id") Integer id){
 		return new ResponseEntity<>(subCategoryService.getZkartSubCategoryByCategoryId(id),HttpStatus.OK);
 	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/updateByName/{catId}/{existing}/{new}")
+	public ResponseEntity<String> updateZkartCategory(@PathVariable("catId")Integer catId,@PathVariable("existing") String existing,@PathVariable("new") String newName){
+		if(subCategoryService.updateZkartSubCategoryByName(catId,existing,newName)==true) {
+			return new ResponseEntity<>("category updated",HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/deleteByName/{catId}/{name}")
+	public ResponseEntity<String> deleteZkartCategoryByName(@PathVariable("catId")Integer catId,@PathVariable("name") String name){
+		if(subCategoryService.deleteZkartSubCategoryByName(catId,name)==true) {
+			return new ResponseEntity<>("category deleted",HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
+		}
+	}
+
 }
