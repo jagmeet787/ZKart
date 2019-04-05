@@ -1,5 +1,8 @@
 package zkart.entity;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity 
 public class Item{
@@ -41,6 +46,12 @@ public class Item{
         @JoinColumn(name="SELLERID", referencedColumnName="ID")
     })
 	private User user;
+	
+	
+	//@OneToMany(targetEntity=ItemFilters.class, mappedBy="item",cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    //private Set<ItemFilters> itemFilters;
+	
+	
 	private Integer quantity;
 	private Integer price;
 	private String colour;
@@ -50,6 +61,18 @@ public class Item{
 	private String priority;
 	private Integer discount;
 	private Integer bdaydiscount;
+
+	public Item() {
+		super();
+	}
+
+	/*public Set<ItemFilters> getItemFilters() {
+		return itemFilters;
+	}
+
+	public void setItemFilters(Set<ItemFilters> itemFilters) {
+		this.itemFilters = itemFilters;
+	}*/
 
 	public Integer getBdaydiscount() {
 		return bdaydiscount;
