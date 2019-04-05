@@ -61,6 +61,10 @@ public class FilterController {
 			return new ResponseEntity<>("error",HttpStatus.BAD_REQUEST);
 		}
 	}
+	@RequestMapping(method=RequestMethod.GET,value="/subcategory/{id}")
+	public ResponseEntity<ArrayList<Filter>> getAllZkartFiltesBySubCategoryId(@PathVariable("id") Integer subCategoryId){
+		return new ResponseEntity<>(filterService.getAllZkartFiltersBySubCategoryId(subCategoryId),HttpStatus.OK);
+	}
 /*
 	@RequestMapping(method = RequestMethod.PUT, value = "/updateByName/{existing}/{new}")
 	public ResponseEntity<String> updateZkartCategory(@PathVariable("existing") String existing,@PathVariable("new") String newName){

@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity 
 public class ItemFilters {
 	
@@ -27,6 +29,7 @@ public class ItemFilters {
     @JoinColumns({
         @JoinColumn(name="FILTERID", referencedColumnName="ID")
     }) 
+	@JsonBackReference
 	private FilterValues filterValues;
 	public ItemFilters() {
 		
