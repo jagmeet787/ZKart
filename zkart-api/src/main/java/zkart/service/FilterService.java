@@ -60,6 +60,10 @@ public class FilterService {
 		return res;
 	}
 	
+	public ArrayList<Filter> getAllZkartFiltersBySubCategoryId(Integer subCategoryId){
+		return filterRepository.findAllBySubCategoryId(subCategoryId);
+	}
+	
 	/*
 	 * 
 	 * public boolean addZkartFilter(Filter filter) {

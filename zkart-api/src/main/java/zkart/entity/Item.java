@@ -15,7 +15,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity 
+//@Table(name="item")
 public class Item{
 	
 	@Id
@@ -48,8 +52,10 @@ public class Item{
 	private User user;
 	
 	
-	//@OneToMany(targetEntity=ItemFilters.class, mappedBy="item",cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    //private Set<ItemFilters> itemFilters;
+	/*@OneToMany(targetEntity=ItemFilters.class, mappedBy="item",cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+	//@JsonIgnore
+	@JsonManagedReference
+	private Set<ItemFilters> itemFilters;*/
 	
 	
 	private Integer quantity;
