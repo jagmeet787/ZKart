@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import zkart.entity.Account;
+import zkart.entity.Item;
 import zkart.entity.Orders;
 import zkart.service.AccountService;
+import zkart.service.ItemService;
 import zkart.service.OrdersService;
 import zkart.service.UserService;
 
@@ -34,9 +36,13 @@ public class OrdersController {
 	
 	@Autowired
 	OrdersService ordersService;
-	
+
 	@Autowired
 	AccountService accountService;
+	
+
+	@Autowired
+	ItemService itemService;
 	
 	@Autowired
 	UserService userService;
@@ -91,7 +97,13 @@ public class OrdersController {
 				return new ResponseEntity<>("Failed to Create Order.", HttpStatus.BAD_REQUEST);
 			return new ResponseEntity<>("Order Failed.", HttpStatus.OK);
 		}
-		
+		Item item = itemService.getZkartItemByItemId(order.getItemId());
+		System.out.println("item in order: " + item);
+		if (item.getQuantity() < order.getQuantity())
+			return new ResponseEntity<>("There are less items present in the inventory.", HttpStatus.BAD_REQUEST);
+		item.setQuantity(item.getQuantity() - order.getQuantity());
+		System.out.println(item);
+		itemService.updateZkartItem(item.getId(), item);
 		return new ResponseEntity<>("Success.", HttpStatus.OK);
 	}
 
