@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import zkart.dto.Pair;
 import zkart.entity.Category;
 import zkart.entity.ItemFilters;
 import zkart.repository.ItemFiltersRepository;
@@ -46,5 +47,9 @@ public class ItemFiltersService {
 			itemFilters.add(iterator.next());
 		}
 		return itemFilters;
+	}
+
+	public ArrayList<ItemFilters> getAllItemFiltersByItemId(Integer itemId) {
+		return itemFiltersRepository.findByItemId(itemId);
 	}
 }

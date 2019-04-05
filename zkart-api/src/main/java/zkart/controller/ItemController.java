@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import zkart.dto.ItemDTO;
+import zkart.dto.Pair;
 import zkart.entity.Item;
+import zkart.entity.ItemDetails;
+import zkart.entity.ItemFilters;
+import zkart.service.ItemDetailsService;
+import zkart.service.ItemFiltersService;
 import zkart.service.ItemService;
 import zkart.service.StorageService;
 
@@ -27,10 +34,8 @@ import zkart.service.StorageService;
 public class ItemController {
 	
 	@Autowired
-    private StorageService storageService;
-	
-	@Autowired
 	private ItemService itemService;
+	
 		
 	@RequestMapping(method = RequestMethod.POST, value = "/addItem")
 	public ResponseEntity<String> addItem(@RequestParam(value = "formData", required = false) String formData,@RequestParam("file") MultipartFile file) {
@@ -106,5 +111,8 @@ public class ItemController {
 		return new ResponseEntity<>(itemService.getZkartItemsBySellerId(id),HttpStatus.OK);
 	}
 	
-
+	@GetMapping("/itemDTO/subCategoryId/{subCategoryId}")
+	public ResponseEntity<ArrayList<ItemDTO>> getItemDTOBySubcategoryId(@PathVariable("subCategoryId") Integer subCategoryId){
+		return new ResponseEntity<>(itemService.getItemDTOsBySubCategoryId(subCategoryId), HttpStatus.OK);
+	}
 }

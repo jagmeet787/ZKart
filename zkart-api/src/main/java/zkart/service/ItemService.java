@@ -9,8 +9,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import zkart.dto.ItemDTO;
+import zkart.dto.Pair;
 import zkart.entity.Account;
 import zkart.entity.Item;
+import zkart.entity.ItemDetails;
+import zkart.entity.ItemFilters;
 import zkart.entity.SubCategory;
 import zkart.repository.ItemRepository;
 
@@ -27,7 +31,11 @@ public class ItemService {
 	private StorageService storageService;
 	
 	@Autowired
-	private UserService userService;
+	private ItemFiltersService itemFiltersService;
+	
+	@Autowired
+	private ItemDetailsService itemDetailsService;
+	
 	
 	public String addItem(MultipartFile file,String formData) {
 		Item item=null;
@@ -116,6 +124,24 @@ public class ItemService {
 	}
 	public ArrayList<Item> getZkartItemsBySellerId(Integer sellerId){
 		return itemRepository.findAllByUserId(sellerId);
+	}
+	public ArrayList<ItemDTO> getItemDTOsBySubCategoryId(Integer subCategoryId) {
+		ArrayList<Item> items = this.getAllItemsBySubcategoryId(subCategoryId);
+		ArrayList<ItemDTO> itemDTOs = new ArrayList<ItemDTO>();
+		for(Item item : items) {
+			ArrayList<Pair> filterValues = new ArrayList<Pair>();
+			ArrayList<ItemFilters> itemFilterValues = itemFiltersService.getAllItemFiltersByItemId(item.getId());
+			for(ItemFilters ifv : itemFilterValues) {
+				filterValues.add(new Pair(ifv.getFilterValues().getFilter().getFilterName(), ifv.getFilterValues().getValue()));
+			}
+			ArrayList<Pair> itemAttributes = new ArrayList<Pair>();
+			ArrayList<ItemDetails> itemDetails = itemDetailsService.getZkartItemDetails(item.getId());
+			for(ItemDetails itd : itemDetails) {
+				itemAttributes.add(new Pair(itd.getAttr_name(), itd.getAttr_val()));
+			}
+			itemDTOs.add(new ItemDTO(item, itemAttributes, filterValues));
+		}
+		return itemDTOs;
 	}
 
 }
