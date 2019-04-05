@@ -78,6 +78,7 @@ public class ItemService {
 	}
 	
 	public Boolean updateZkartItem(Integer id,Item item) {
+		System.out.println("update item: " + item);
 		boolean res=true;
 		item.setId(id);
 		try {
