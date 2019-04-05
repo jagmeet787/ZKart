@@ -10,6 +10,7 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity 
 public class ItemFilters {
@@ -23,13 +24,13 @@ public class ItemFilters {
     @JoinColumns({
         @JoinColumn(name="ITEMID", referencedColumnName="ID")
     })
+	@JsonIgnore
 	private Item item;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumns({
         @JoinColumn(name="FILTERID", referencedColumnName="ID")
     }) 
-	@JsonBackReference
 	private FilterValues filterValues;
 	public ItemFilters() {
 		
