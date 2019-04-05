@@ -24,7 +24,6 @@ public class ItemFilters {
     @JoinColumns({
         @JoinColumn(name="ITEMID", referencedColumnName="ID")
     })
-	@JsonIgnore
 	private Item item;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
