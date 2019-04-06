@@ -52,7 +52,7 @@ public class WishlistService {
 		ArrayList<Wishlist> wishlists=wishlistRepository.findAllByUserId(userId);
 		Wishlist result=null;
 		for(Wishlist wishlist:wishlists) {
-			if(wishlist.getItem().getId()==itemId) {
+			if(wishlist.getItem().getId().equals(itemId)) {
 				result=wishlist;
 			}
 		}
