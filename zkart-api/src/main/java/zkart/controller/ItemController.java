@@ -79,7 +79,7 @@ public class ItemController {
 	@RequestMapping(method=RequestMethod.PUT,value="/update/quantity/{id}")
 	public ResponseEntity<String> updateItemQuantity(@PathVariable("id") int id,@RequestBody Item item){
 		Item itemDetails = itemService.getZkartItemById(id);
-		itemDetails.setQuantity(item.getQuantity());
+		itemDetails.setQuantity(item.getQuantity() + itemDetails.getQuantity());
 		boolean res = itemService.updateZkartItem(id, itemDetails);
 		if(res)
 			return new ResponseEntity<>("updated",HttpStatus.OK);

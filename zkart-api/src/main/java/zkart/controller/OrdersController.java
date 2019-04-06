@@ -170,6 +170,12 @@ public class OrdersController {
 			orderDetails.setOrderStatus(orderStatus);
 			ordersService.updateOrder(orderDetails);
 			
+			// update the quantity of item as order is cancelled add back to the inventory
+			Item item = itemService.getZkartItemByItemId(order.getItemId());
+			item.setQuantity(item.getQuantity() + order.getQuantity());
+			System.out.println(item);
+			itemService.updateZkartItem(item.getId(), item);
+			
 			Account userAccount = accountService.getAccountByAccountNumber(order.getBuyerAccountNo());
 			Account zkartAccount = accountService.getAccountByUserId(ZKART_USERID);
 			
