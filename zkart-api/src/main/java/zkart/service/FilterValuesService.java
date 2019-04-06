@@ -32,7 +32,8 @@ public class FilterValuesService {
 		filterValues = getZkartFilterValues();
 		for(FilterValues i : filterValues)
 		{
-			if(i.getFilter().getId()==filterId)
+			System.out.println(i.getFilter().getId());
+			if(i.getFilter().getId().equals(filterId))
 				result.add(i);
 		}
 		return result;

@@ -38,7 +38,7 @@ public class FilterValuesController {
 	
 @RequestMapping(method = RequestMethod.POST, value = "/create/{filterId}/{value}")
 	public ResponseEntity<String> addZkartFilterValues(@PathVariable("filterId")int filterId,@PathVariable("value")String value){
-		System.out.println("hello from createFilterValues");
+		System.out.println("createFilterValues " + filterId + " " + value);
 		if(filterValuesService.addZkartFilterValues(filterId,value)==true) {
 			return new ResponseEntity<>("filterValue added",HttpStatus.OK);
 		}else {
